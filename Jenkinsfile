@@ -10,7 +10,7 @@ pipeline {
         stage('') {
             steps {
                 script {
-                    python /home/duck/projects/python3-4chan-scraper/my.py board s
+                    python "/home/duck/projects/python3-4chan-scraper/my.py" board s
                 }
             }
         }
