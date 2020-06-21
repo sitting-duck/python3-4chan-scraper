@@ -11,8 +11,8 @@ pipeline {
             steps {
                 script {
                     sh """
-                    source ~/.venv/py3/bin/activate
-                    python3 "~/projects/python3-4chan-scraper/my.py" board s
+                    source /home/duck/.venv/py3/bin/activate
+                    python3 "/home/duck/projects/python3-4chan-scraper/my.py" board s
                     """
                 }
             }
