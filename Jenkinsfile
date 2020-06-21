@@ -10,8 +10,7 @@ pipeline {
         stage('') {
             steps {
                 script {
-                    sh """
-                    #!/bin/bash
+                    bash """#!/bin/bash
                     source /home/duck/.venv/py3/bin/activate
                     python3 "/home/duck/projects/python3-4chan-scraper/my.py" board s
                     """
