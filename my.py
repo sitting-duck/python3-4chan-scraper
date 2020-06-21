@@ -53,12 +53,21 @@ def download_file(url, dest_dir, filename=None):
         print("mah url: " + str(url))
         filename = path_leaf(url)
 
+    _, ext = os.path.splitext(filename)
+    if ext == ".webm":
+        return
+        
+
     request = requests.get(url)
     image = Image.open(BytesIO(request.content))
     image.save(os.path.join(dest_dir, filename))
 
 def main():
     print("Tharp 4chan image scraper")
+
+    if len(sys.argv) != 4:
+        print("Usage: my.py board <board_letter> <dest_dir>")
+        return 0
 
     if(sys.argv[1] == "board"):
         board = sys.argv[2]
@@ -100,25 +109,5 @@ def main():
                 except: 
                     print("Error: while downloading " + url + " skipping.")
 
-#        html = requests.get(url).text
-#        f = open("html.txt", "a+")
-#        f.write(str(html.encode()))
-#        f.close()
-#        soup = BeautifulSoup(html, "html.parser")
-#        for link in soup.find_all('script'):
-#            print("link: " + str(link.encode()))
-#            if '//boards.4chan.org/s/thread/' in href:
-#                print("thread: " + href)
-#                url = "https:" + href
-#                thread_html = requests.get(url).text
-#                thread_soup = BeautifulSoup(thread_html, "html.parser")
-#                for thread_link in thread_soup.find_all('a'):
-#                    thread_href = thread_link.get('href')
-#                    if '//i.4cdn.org/' in thread_href:
-#                        print("thread img: " + href)
-#                        url = "https:" + href
-#                        download_file(url, dest_dir) 
-#
-        
-
-main()
+if __name__ == '__main__':
+    main()
