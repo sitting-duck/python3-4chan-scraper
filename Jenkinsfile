@@ -10,7 +10,9 @@ pipeline {
         stage('') {
             steps {
                 script {
+                    sh """
                     python3 "/home/duck/projects/python3-4chan-scraper/my.py" board s
+                    """
                 }
             }
         }
