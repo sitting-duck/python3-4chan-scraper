@@ -1,6 +1,8 @@
 # 4chan Image Scraper
 An image scraper written in Python.
 Run in Jenkins to scrape every night at midnight.
+Grabs associated text in the posts too. 
+Can be interesting to run on pol to see what is going on in reaction to public events.
 
 ### Usage (Linux, OSX):
 
