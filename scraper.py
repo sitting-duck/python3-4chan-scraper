@@ -7,10 +7,6 @@ from io import BytesIO
 from PIL import Image
 import ntpath 
 
-def path_leaf(path):
-    head, tail = ntpath.split(path)
-    return tail or ntpath.basename(head)
-
 def get_board_threads(url):
 
     thread_ids = []
@@ -40,6 +36,9 @@ def get_board_threads(url):
     # mod's sticky for the board
     return thread_ids[1:]
 
+def path_leaf(path):
+    head, tail = ntpath.split(path)
+    return tail or ntpath.basename(head)
 
 def download_file(url, dest_dir, filename=None):
     print("download_file():")
@@ -54,89 +53,61 @@ def download_file(url, dest_dir, filename=None):
         print("mah url: " + str(url))
         filename = path_leaf(url)
 
+    _, ext = os.path.splitext(filename)
+    if ext == ".webm":
+        return
+        
+
     request = requests.get(url)
     image = Image.open(BytesIO(request.content))
     image.save(os.path.join(dest_dir, filename))
 
-
-def get_file_urls(soup):
-    print("get_file_urls(): ")
-    for item in soup:
-        print("item: " + str(item.encode()))
-
-    file_urls = []
-
-    for anchor in soup.find_all(attrs={'class': 'fileThumb'}):
-        print("mah anchor: " + str(anchor))
-        print("mah anchor type: " +str( type(anchor)))
-        # Fix 4chan's href, which excludes the 'https://' protocol
-        file_urls.append(sub("//", "http://", str(anchor.get('href'))))
-
-    return file_urls
-
-
-def get_filenames(soup):
-    filenames = []
-
-    for anchor in soup.find_all(attrs={'class': 'fileText'}):
-        filenames.append(anchor.get_text().split(" ")[1])
-
-    return filenames
-
-
 def main():
+    print("Tharp 4chan image scraper")
 
-    print("4chan Image Scraper by Grayson Pike")
+    if len(sys.argv) != 4:
+        print("Usage: my.py board <board_letter> <dest_dir>")
+        return 0
 
-    if(sys.argv[1] == "thread"):
-        # First argument is the thread URL
-        url = sys.argv[2]
-        # Second is the output directory
-        # Output directory is via local (relative) path
-        # ex. output
-        # ex. output/
-        # You can also do absolute paths (only tested with linux & mac)
-        # ex. /Users/graysonpike/Desktop/4chan
+    if(sys.argv[1] == "board"):
+        board = sys.argv[2]
+        print("Checking board catalog @: " + "http://boards.4chan.org/" + board)
+        board_url = "http://boards.4chan.org/" + board
         dest_dir = sys.argv[3]
-
-        print("Downloading images from " + url + " ...")
+        
+        url = "http://boards.4chan.org/" + board
         html = requests.get(url).text
-        # Beautiful soup allows for easy document navigation
         soup = BeautifulSoup(html, "html.parser")
 
-        file_urls = get_file_urls(soup)
-        filenames = get_filenames(soup)
+        #print(soup.prettify().encode())
 
-        for i in range(len(file_urls)):
-            print("Downloading File: " + filenames[i])
-            download_file(file_urls[i], dest_dir, filenames[i])
-
-    elif(sys.argv[1] == "board"):
-        board = sys.argv[2]
-        print("Checking board catalog @: " + "http://boards.4chan.org/" + board + "/catalog")
-        #board_url = "http://boards.4chan.org/" + board + "/catalog"
-        board_url = "http://boards.4chan.org/" + board
-        thread_ids = get_board_threads(board_url)
-        dest_dir = sys.argv[3]
-
-        for thread in thread_ids:
-            print("Downloading thread (id: " + thread + ") @: http://boards.4chan.org/" + board + "/thread/" + thread)
-            url = "http://boards.4chan.org/" + board + "/thread/" + thread
+        for link in soup.find_all('a'):
+            #print(link.get('href'))
+            href = link.get('href')
+            if '//i.4cdn.org/' in href:
+                print("img: " + href)
+                url = "https:" + href
+                download_file(url, dest_dir)
+        
+        url = "https://boards.4chan.org/" + board + "/catalog"
+        print("new board url: " + url)
+        threads = get_board_threads(url) 
+        
+        for thread in threads:
+            url = "https://boards.4chan.org/s/thread/" + thread
             html = requests.get(url).text
-
-            # Beautiful soup allows for easy document navigation
             soup = BeautifulSoup(html, "html.parser")
-            file_urls = get_file_urls(soup)
-            filenames = get_filenames(soup)
-            for i in range(len(file_urls)):
-                print("mah i: " + str(i))
-                print("len fn: " + str(len(filenames)) + " " + str(len(file_urls)))
-                #download_file(file_urls[i], dest_dir, filenames[i])
-                download_file(file_urls[i], dest_dir)
 
-    else:
-        print("Usage: python3 scraper.py <'thread' or 'board'> <thread url or board letter> <dest directory>")
-        print("See: https://github.com/Grayson112233/python-4chan-scraper")
+            for img in soup.find_all('img'):
+                print("img: " + str(img.encode()))
+                src = img.get('src')
+                url = "http:" + src
+                url = url.replace("s.jpg", ".jpg")
+                url = url.replace("s.png", ".png")               
+                try: 
+                    download_file(url, dest_dir)
+                except: 
+                    print("Error: while downloading " + url + " skipping.")
 
-
-main()
+if __name__ == '__main__':
+    main()

@@ -12,7 +12,7 @@ pipeline {
                 script {
                     sh """#!/bin/bash
                     source /home/duck/.venv/py3/bin/activate
-                    python3 "/home/duck/projects/python3-4chan-scraper/my.py" board s /home/duck/projects/datasets
+                    python3 "/home/duck/projects/python3-4chan-scraper/scraper.py" board s /home/duck/projects/datasets
                     """
                 }
             }
