@@ -1,8 +1,10 @@
 # 4chan Image Scraper
 An image scraper written in Python.
+Run in Jenkins to scrape every night at midnight.
 
 ### Usage (Linux, OSX):
 
+** I have not tested this on OSX
 - Use python3
 - Make sure to install dependencies (BeautifulSoup4):
   - `sudo pip3 install -r requirements.txt`
@@ -20,4 +22,9 @@ NOTE: If you experience an error installing Pillow with pip3, try installing the
   - `output`
   - `output/`
 - Absolute Paths:
-  - `/Users/grayson/Pictures/4chan`
+  - `/Users/me/Pictures/4chan`
+
+### Jenkins:
+Ive included a JenkinsFIle for use with a declarative pipeline. 
+If you don't have it installed you may have to install the CRON plugin. 
+CRON is what allows the Jenkins to get a signal to run your script. 
