@@ -1,3 +1,6 @@
+Original found here: https://github.com/graysonpike/python-4chan-scraper
+My code is more recent, but has less features. I had to modify the code a little from grayson original implementation. Maybe 4chan code has changed on the site or something. /shrug
+
 # 4chan Image Scraper
 An image scraper written in Python.
 Run in Jenkins to scrape every night at midnight.
