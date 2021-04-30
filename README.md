@@ -6,11 +6,10 @@ An image scraper written in Python.
 Run in Jenkins to scrape every night at midnight.
 Grabs associated text in the posts too. 
 Can be interesting to run on pol to see what is going on in reaction to public events, or just create datasets of images. 
-I like to use the YOLO neural net classifier to then sort these images according to subject.
 
-### Usage (Linux, OSX):
+### Usage (Linux OSX):
 
-** I have not tested this on OSX
+** I have not tested this on OSX - but the original Grayson repo claims that his source workds on OSX, so I will take his word for it,
 - Use python3
 - Make sure to install dependencies (BeautifulSoup4):
   - `sudo pip3 install -r requirements.txt`
