@@ -5,7 +5,8 @@ My code is more recent, but has less features. I had to modify the code a little
 An image scraper written in Python.
 Run in Jenkins to scrape every night at midnight.
 Grabs associated text in the posts too. 
-Can be interesting to run on pol to see what is going on in reaction to public events.
+Can be interesting to run on pol to see what is going on in reaction to public events, or just create datasets of images. 
+I like to use the YOLO neural net classifier to then sort these images according to subject.
 
 ### Usage (Linux, OSX):
 
